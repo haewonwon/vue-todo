@@ -45,7 +45,7 @@
 
 ## 📚 학습 기록
 
-🗂️ [**Notion 정리 링크 바로가기**](https://your-notion-link-here)
+🗂️ [**Notion 정리 링크 바로가기**]([https://your-notion-link-here](https://nettle-pilot-25c.notion.site/Vue-js-2a0178c4afac80b59c44e09c42a0aa90))
 
 > 학습 개념 정리, React와 Vue의 구조적 차이 분석, 예제 코드 정리 등 기록
 
