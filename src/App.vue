@@ -1,72 +1,4 @@
-<script setup>
-import { ref, computed, watch } from 'vue';
-
-const newTitle = ref('');
-const filter = ref('all'); // all | active | completed
-const todos = ref(load() ?? []);
-
-function load() {
-  try {
-    return JSON.parse(localStorage.getItem('todos-v1') || '[]');
-  } catch {
-    return [];
-  }
-}
-watch(todos, (v) => localStorage.setItem('todos-v1', JSON.stringify(v)), { deep: true });
-
-function addTodo() {
-  const title = newTitle.value.trim();
-  if (!title) return;
-  todos.value.unshift({ id: crypto.randomUUID(), title, done: false, editing: false });
-  newTitle.value = '';
-}
-function toggle(id) {
-  const t = todos.value.find((t) => t.id === id);
-  if (t) t.done = !t.done;
-}
-function remove(id) {
-  todos.value = todos.value.filter((t) => t.id !== id);
-}
-function clearCompleted() {
-  todos.value = todos.value.filter((t) => !t.done);
-}
-function startEdit(t) {
-  t.editing = true;
-  t._backup = t.title;
-}
-function finishEdit(t) {
-  t.editing = false;
-  t.title = t.title.trim();
-  if (!t.title) remove(t.id);
-  delete t._backup;
-}
-function cancelEdit(t) {
-  t.editing = false;
-  t.title = t._backup;
-  delete t._backup;
-}
-
-const remaining = computed(() => todos.value.filter((t) => !t.done).length);
-const filtered = computed(() => {
-  if (filter.value === 'active') return todos.value.filter((t) => !t.done);
-  if (filter.value === 'completed') return todos.value.filter((t) => t.done);
-  return todos.value;
-});
-</script>
-
-<style>
-.app button {
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  background: #fafafa;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.app button.active {
-  border-color: #333;
-}
-</style>
-
+<!-- 템플릿 -->
 <template>
   <div
     class="app"
@@ -160,3 +92,74 @@ const filtered = computed(() => {
     </div>
   </div>
 </template>
+
+<!-- 스크립트 -->
+<script setup>
+import { ref, computed, watch } from 'vue';
+
+const newTitle = ref('');
+const filter = ref('all'); // all | active | completed
+const todos = ref(load() ?? []);
+
+function load() {
+  try {
+    return JSON.parse(localStorage.getItem('todos-v1') || '[]');
+  } catch {
+    return [];
+  }
+}
+watch(todos, (v) => localStorage.setItem('todos-v1', JSON.stringify(v)), { deep: true });
+
+function addTodo() {
+  const title = newTitle.value.trim();
+  if (!title) return;
+  todos.value.unshift({ id: crypto.randomUUID(), title, done: false, editing: false });
+  newTitle.value = '';
+}
+function toggle(id) {
+  const t = todos.value.find((t) => t.id === id);
+  if (t) t.done = !t.done;
+}
+function remove(id) {
+  todos.value = todos.value.filter((t) => t.id !== id);
+}
+function clearCompleted() {
+  todos.value = todos.value.filter((t) => !t.done);
+}
+function startEdit(t) {
+  t.editing = true;
+  t._backup = t.title;
+}
+function finishEdit(t) {
+  t.editing = false;
+  t.title = t.title.trim();
+  if (!t.title) remove(t.id);
+  delete t._backup;
+}
+function cancelEdit(t) {
+  t.editing = false;
+  t.title = t._backup;
+  delete t._backup;
+}
+
+const remaining = computed(() => todos.value.filter((t) => !t.done).length);
+const filtered = computed(() => {
+  if (filter.value === 'active') return todos.value.filter((t) => !t.done);
+  if (filter.value === 'completed') return todos.value.filter((t) => t.done);
+  return todos.value;
+});
+</script>
+
+<!-- 스타일 -->
+<style>
+.app button {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.app button.active {
+  border-color: #333;
+}
+</style>
